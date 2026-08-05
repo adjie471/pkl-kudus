@@ -8,7 +8,6 @@ import { Lock, Mail, Eye, EyeOff, ArrowLeft, CheckSquare, Square } from 'lucide-
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 
-// 1. Komponen Internal yang memanggil useSearchParams
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -24,7 +23,7 @@ function LoginForm() {
   useEffect(() => {
     const savedEmail = localStorage.getItem('remembered_admin_email');
     if (savedEmail) {
-      setEmail(savedEmail);
+      setEmail(savedEmail.trim().toLowerCase());
       setRememberMe(true);
     }
   }, []);
@@ -33,16 +32,21 @@ function LoginForm() {
     e.preventDefault();
     setLoading(true);
 
+    // 1. Bersihkan email dari spasi dan paksa huruf kecil (lowercase)
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanPassword = password.trim();
+
     try {
       if (rememberMe) {
-        localStorage.setItem('remembered_admin_email', email);
+        localStorage.setItem('remembered_admin_email', cleanEmail);
       } else {
         localStorage.removeItem('remembered_admin_email');
       }
 
+      // 2. Kirim kredensial yang sudah dibersihkan ke Supabase Auth
       const { data, error } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password: password,
+        email: cleanEmail,
+        password: cleanPassword,
       });
 
       if (error) {
@@ -50,7 +54,10 @@ function LoginForm() {
       } else if (data.user) {
         const maxAge = rememberMe ? 86400 * 30 : 86400;
         document.cookie = `admin_session=true; path=/; max-age=${maxAge}; SameSite=Lax`;
+        
+        // 3. Redirect & Refresh untuk memastikan state session aktif
         router.push(redirectPath);
+        router.refresh();
       }
     } catch (err: any) {
       alert(`Terjadi kesalahan: ${err.message}`);
@@ -69,10 +76,13 @@ function LoginForm() {
           <input
             type="email"
             required
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck="false"
             placeholder="nama@lapak.pkl"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none font-medium"
+            onChange={(e) => setEmail(e.target.value.toLowerCase())}
+            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none font-medium text-slate-900"
           />
         </div>
       </div>
@@ -88,7 +98,7 @@ function LoginForm() {
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full pl-10 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none font-medium"
+            className="w-full pl-10 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none font-medium text-slate-900"
           />
           <button
             type="button"
@@ -129,12 +139,10 @@ function LoginForm() {
   );
 }
 
-// 2. Komponen Utama Halaman dengan pembungkus Suspense
 export default function AdminLoginPage() {
   return (
     <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-3xl shadow-xl border border-slate-200/80 p-8 space-y-6 relative">
-        {/* Tombol Kembali ke Portal */}
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors"
@@ -142,7 +150,6 @@ export default function AdminLoginPage() {
           <ArrowLeft className="w-4 h-4" /> Kembali ke Portal
         </Link>
 
-        {/* Header Form */}
         <div className="text-center space-y-2">
           <div className="w-12 h-12 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center mx-auto shadow-inner">
             <Lock className="w-6 h-6" />
@@ -151,7 +158,6 @@ export default function AdminLoginPage() {
           <p className="text-xs text-slate-500">Masuk untuk mengelola area lapak & pendaftar</p>
         </div>
 
-        {/* Form Login dibungkus Suspense */}
         <Suspense fallback={<div className="text-center text-xs text-slate-400 py-4">Memuat form login...</div>}>
           <LoginForm />
         </Suspense>

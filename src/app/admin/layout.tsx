@@ -12,7 +12,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [loading, setLoading] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // 1. Panggil SEMUA Hook di paling atas tanpa terputus 'return'
   useEffect(() => {
     if (pathname === '/admin/login') {
       setLoading(false);
@@ -35,11 +34,25 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, [pathname]);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push('/admin/login');
+    try {
+      // 1. Sign out dari Supabase
+      await supabase.auth.signOut();
+
+      // 2. Hapus Cookie Session Admin untuk Middleware
+      document.cookie = 'admin_session=; path=/; max-age=0; SameSite=Lax';
+
+      // 3. Hapus Email Terimpan di LocalStorage
+      localStorage.removeItem('remembered_admin_email');
+
+      // 4. Pindah ke Halaman Login & Refresh Router
+      router.push('/admin/login');
+      router.refresh();
+    } catch (error) {
+      console.error('Logout failed:', error);
+      window.location.href = '/admin/login';
+    }
   };
 
-  // 2. Lakukan 'return' kondisi SETELAH semua Hook selesai dipanggil
   if (pathname === '/admin/login') {
     return <>{children}</>;
   }
@@ -140,7 +153,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </Link>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-2 px-3 py-2 text-xs font-bold text-rose-400 hover:bg-rose-950/50 rounded-xl transition-colors"
+            type="button"
+            className="w-full flex items-center gap-2 px-3 py-2 text-xs font-bold text-rose-400 hover:bg-rose-950/50 rounded-xl transition-colors cursor-pointer"
           >
             <LogOut className="w-4 h-4" /> Keluar / Logout
           </button>

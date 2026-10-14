@@ -16,6 +16,7 @@ export default function ModalPresensi({ isOpen, onClose }: ModalPresensiProps) {
   const [loading, setLoading] = useState(false);
   const [successData, setSuccessData] = useState<any | null>(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [hasScanned, setHasScanned] = useState(false); // 👈 Pengunci scan berulang
 
   // State GPS & Lokasi Pedagang
   const [userCoords, setUserCoords] = useState<{ lat: number; lon: number } | null>(null);
@@ -76,6 +77,7 @@ export default function ModalPresensi({ isOpen, onClose }: ModalPresensiProps) {
       setMode('scan');
       setIdUnik('');
       setLoading(false);
+      setHasScanned(false);
       setSuccessData(null);
       setErrorMessage('');
       requestGpsLocation();
@@ -87,6 +89,11 @@ export default function ModalPresensi({ isOpen, onClose }: ModalPresensiProps) {
   // Fungsi utama pencatatan presensi
   const handleProcessPresensi = async (scannedText: string) => {
     if (!scannedText || scannedText.trim() === '') return;
+
+    setHasScanned(true); // 👈 Kunci scan saat pertama kali terdeteksi
+    setLoading(true);
+    setErrorMessage('');
+    setSuccessData(null);
 
     // 1. VALIDASI WAJIB GPS HP TERDETEKSI
     if (!userCoords) {
@@ -366,11 +373,23 @@ export default function ModalPresensi({ isOpen, onClose }: ModalPresensiProps) {
 
             {/* NOTIFIKASI ERROR / PENOLAKAN */}
             {errorMessage && (
-              <div className="p-3 bg-rose-50 border border-rose-200 rounded-2xl text-rose-700 flex items-center gap-2 text-left">
-                <AlertCircle className="w-5 h-5 text-rose-500 shrink-0" />
-                <p className="font-bold text-[11px] leading-tight">{errorMessage}</p>
+              <div className="p-3 bg-rose-50 border border-rose-200 rounded-2xl text-rose-700 text-left space-y-2">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="w-5 h-5 text-rose-500 shrink-0" />
+                  <p className="font-bold text-[11px] leading-tight">{errorMessage}</p>
               </div>
-            )}
+              <button
+                type="button"
+                onClick={() => {
+                  setErrorMessage('');
+                  setHasScanned(false); // 👈 Buka kuncian untuk scan ulang
+                }}
+                className="w-full py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-[10px] rounded-xl shadow transition-all"
+    >
+      Pindai / Coba Lakukan Scan Lagi
+    </button>
+  </div>
+)}
 
             {/* MODE 1: SCAN KAMERA */}
             {mode === 'scan' && (

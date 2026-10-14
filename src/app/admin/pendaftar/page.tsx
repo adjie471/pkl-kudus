@@ -23,7 +23,7 @@ export default function AdminPendaftarPage() {
 
   // State untuk data CMS (Logo, Nama Dinas, Background Kartu)
   const [cms, setCms] = useState<any>({
-    nama_dinas: 'Dinas Perdagangan Kabupaten Kudus',
+    nama_dinas: '',
     logo_url: '',
     bg_card_url: '',
   });
@@ -77,7 +77,7 @@ export default function AdminPendaftarPage() {
       const { data } = await supabase.from('cms_landingpage').select('*').eq('id', 1).single();
       if (data) {
         setCms({
-          nama_dinas: data.nama_dinas || 'Dinas Perdagangan Kabupaten Kudus',
+          nama_dinas: data.nama_dinas || '',
           logo_url: data.logo_url || '',
           bg_card_url: data.bg_card_url || '',
         });
@@ -234,7 +234,7 @@ export default function AdminPendaftarPage() {
       {/* Tabel Data Master Pendaftar */}
       <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
         {loading ? (
-          <div className="py-8 text-center text-xs text-slate-400">Memuat data pendaftar...</div>
+          <div className="py-8 text-center text-xs text-slate-400">Memuat data pedagang...</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
@@ -409,7 +409,7 @@ export default function AdminPendaftarPage() {
                 <History className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="font-extrabold text-sm text-slate-900">Histori Presensi Pedagang</h3>
+                <h3 className="font-extrabold text-sm text-slate-900">Histori Buku Hadir Lapangan Pedagang</h3>
                 <p className="text-[10px] text-slate-500">
                   {selectedHistoryItem.nama_lengkap} (<b className="font-mono text-teal-700">{selectedHistoryItem.id_unik}</b>)
                 </p>
@@ -419,9 +419,9 @@ export default function AdminPendaftarPage() {
             {/* List Riwayat Presensi */}
             <div className="max-h-60 overflow-y-auto space-y-2 pr-1">
               {loadingHistory ? (
-                <div className="py-8 text-center text-slate-400">Memuat riwayat presensi...</div>
+                <div className="py-8 text-center text-slate-400">Memuat riwayat buku hadir lapangan...</div>
               ) : historyLogs.length === 0 ? (
-                <div className="py-8 text-center text-slate-400">Belum ada catatan presensi untuk pedagang ini.</div>
+                <div className="py-8 text-center text-slate-400">Belum ada catatan buku hadir lapangan untuk pedagang ini.</div>
               ) : (
                 historyLogs.map((log) => {
                   const createdDate = new Date(log.created_at || log.tanggal_absen);

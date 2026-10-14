@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pendaftaran Lapak CFD & CFN - Dinas Perdagangan Kab. Kudus",
-  description: "Portal Resmi Pendaftaran Lapak CFD dan CFN Dinas Perdagangan Kabupaten Kudus",
+  title: "Layanan Pendataan Mandiri Pedagang CFD/CFN",
+  description: "",
 };
 
 export default function RootLayout({

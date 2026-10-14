@@ -58,13 +58,13 @@ export default function AbsenPage() {
           <div className="inline-flex p-3 bg-amber-100 rounded-full mb-2">
             <Navigation className="w-8 h-8 text-amber-600" />
           </div>
-          <h1 className="text-xl font-bold text-slate-800">Presensi Mandiri PKL</h1>
+          <h1 className="text-xl font-bold text-slate-800">Pengisian Mandiri Buku Hadir Lapangan Pedagang</h1>
           <p className="text-xs text-slate-500 mt-1">Verifikasi Geofencing Lokasi Lapak</p>
         </div>
 
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">ID Unik Lapak</label>
+            <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">No. Kupon Lapak Lapak</label>
             <div className="relative">
               <QrCode className="w-5 h-5 absolute left-3 top-3 text-slate-400" />
               <input

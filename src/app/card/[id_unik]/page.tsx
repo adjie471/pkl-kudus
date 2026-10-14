@@ -48,7 +48,7 @@ export default function CardPage() {
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
         <div className="text-center space-y-2">
           <div className="w-8 h-8 border-4 border-teal-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="text-xs font-semibold text-slate-500">Mencari Data Pendaftaran...</p>
+          <p className="text-xs font-semibold text-slate-500">Mencari Data Pedagang...</p>
         </div>
       </div>
     );
@@ -127,10 +127,10 @@ export default function CardPage() {
               <div className="flex justify-center items-center gap-1.5 mb-1">
                 <ShieldCheck className="w-5 h-5 text-amber-300" />
                 <span className="text-[10px] tracking-widest font-bold uppercase text-teal-200">
-                  Kartu Tanda Pedagang Resmi
+                  Kupon Lapak Pedagang
                 </span>
               </div>
-              <h2 className="text-base font-black uppercase tracking-wide">Dinas Perdagangan Kudus</h2>
+              <h2 className="text-base font-black uppercase tracking-wide"></h2>
             </div>
 
             {/* Content Body */}
@@ -177,7 +177,7 @@ export default function CardPage() {
             onClick={() => window.print()}
             className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all"
           >
-            <Printer className="w-4 h-4" /> Cetak ID Card (PDF / Printer)
+            <Printer className="w-4 h-4" /> Cetak Kupon Lapak (PDF / Printer)
           </button>
         )}
 

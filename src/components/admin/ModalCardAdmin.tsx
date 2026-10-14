@@ -14,7 +14,7 @@ interface ModalCardAdminProps {
 
 export default function ModalCardAdmin({
   data,
-  namaDinas = 'Dinas Perdagangan Kabupaten Kudus',
+  namaDinas = '',
   logoUrl,
   bgCardUrl,
   onClose,
@@ -36,7 +36,7 @@ export default function ModalCardAdmin({
       link.download = `Kartu_Pedagang_${data.id_unik}_${data.nama_lengkap.replace(/\s+/g, '_')}.png`;
       link.click();
     } catch (error: any) {
-      alert(`Gagal mengunduh gambar kartu ID: ${error.message || 'Silakan coba lagi.'}`);
+      alert(`Gagal mengunduh gambar Kupon Lapak: ${error.message || 'Silakan coba lagi.'}`);
     }
   };
 
@@ -80,10 +80,10 @@ export default function ModalCardAdmin({
           {/* Header Modal */}
           <div className="space-y-1 pt-2">
             <span className="px-3 py-1 bg-teal-100 text-teal-800 font-extrabold text-[10px] rounded-full uppercase">
-              Kartu Tanda Pedagang (Admin View)
+              Kupon Lapak (Admin View)
             </span>
             <h3 className="font-extrabold text-base text-slate-900 mt-2">{data.nama_lengkap}</h3>
-            <p className="text-[11px] text-slate-500">Pilih format unduhan kartu sesuai kebutuhan pedagang.</p>
+            <p className="text-[11px] text-slate-500">Pilih format unduhan kartu kupon sesuai kebutuhan.</p>
           </div>
 
           {/* ================= AREA KARTU ID ================= */}
@@ -109,7 +109,7 @@ export default function ModalCardAdmin({
                 
                 <div>
                   <h4 className="font-extrabold text-[9px] leading-tight text-white uppercase tracking-tight">{namaDinas}</h4>
-                  <p className="text-[8px] text-teal-300 font-mono">Kartu Tanda Pedagang Lapak</p>
+                  <p className="text-[8px] text-teal-300 font-mono">Kupon Lapak Pedagang</p>
                 </div>
               </div>
 
@@ -122,7 +122,7 @@ export default function ModalCardAdmin({
             <div className="grid grid-cols-12 gap-2 items-center z-10 my-auto">
               <div className="col-span-7 space-y-1.5">
                 <div>
-                  <p className="text-[8px] text-teal-200 uppercase font-mono leading-none">ID Unik Pedagang</p>
+                  <p className="text-[8px] text-teal-200 uppercase font-mono leading-none">No. Kupon Lapak Pedagang</p>
                   <p className="font-mono font-black text-sm text-amber-400 tracking-wider leading-tight">{data.id_unik}</p>
                 </div>
 
@@ -148,7 +148,7 @@ export default function ModalCardAdmin({
                     level="H"
                   />
                 </div>
-                <span className="text-[7px] text-slate-300 font-mono mt-1">Scan untuk Presensi</span>
+                <span className="text-[7px] text-slate-300 font-mono mt-1">Scan untuk Mengisi Buku Hadir</span>
               </div>
             </div>
 
@@ -158,7 +158,7 @@ export default function ModalCardAdmin({
                 <b className="text-amber-300">Penting:</b> Lapak hangus jika tidak berjualan{' '}
                 {data.event_type === 'CFN' ? '4x berturut-turut' : '4 minggu berturut-turut'}.
               </span>
-              <span className="shrink-0 font-mono text-slate-300">Kab. Kudus</span>
+              <span className="shrink-0 font-mono text-slate-300"></span>
             </div>
           </div>
           {/* ================= END KARTU ID ================= */}
@@ -169,7 +169,7 @@ export default function ModalCardAdmin({
               onClick={handleDownloadImage}
               className="py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-900 font-extrabold rounded-xl shadow flex items-center justify-center gap-1.5 transition-all text-xs"
             >
-              <ImageIcon className="w-4 h-4" /> Download Gambar
+              <ImageIcon className="w-4 h-4" /> Download Kupon Lapak
             </button>
 
             <button
